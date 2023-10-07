@@ -666,7 +666,7 @@ text-transform: uppercase;
   border: none;
   color: var(--clr-white);
   padding: 1rem;
-  
+  text-transform: uppercase;
 }
 /* About */
 .about-container{
