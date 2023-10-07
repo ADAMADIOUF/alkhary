@@ -16,8 +16,9 @@ exports.handler = async (event, context, cb) => {
         
         img,
         title,
-        descone,desctwo,
-        priceone,pricetwo,descthree,pricethree
+        descone,
+        priceone,
+        categories
         
       } = fields
       // Convert img to an array of URLs
@@ -30,11 +31,9 @@ exports.handler = async (event, context, cb) => {
         title,
         img: images,
         descone,
-        desctwo,
+       
         priceone,
-        pricetwo,
-        descthree,
-        pricethree,
+        categories
       }
     })
 

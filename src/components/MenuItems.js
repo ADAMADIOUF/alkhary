@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
-import Order from './Order'
+import { useCart } from '../CartContext'
+import { FaAngleRight } from 'react-icons/fa'
 
 const SingleMenuItem = () => {
+  const navigate = useNavigate() // Initialize the navigate function
+
   const { id } = useParams()
   const [menuItem, setMenuItem] = useState({})
+  const { cart, addToCart } = useCart()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -30,6 +34,10 @@ const SingleMenuItem = () => {
     fetchData()
   }, [id])
 
+  const handleAddToCart = () => {
+    addToCart(menuItem)
+    navigate('/cart') // Navigate to the cart page
+  }
   if (loading) {
     return (
       <div className='menu-details section-center'>
@@ -48,38 +56,39 @@ const SingleMenuItem = () => {
 
   return (
     <>
-      <div className='menu-details section-center'>
-        {/* Display the image if it exists */}
-        {menuItem.img && menuItem.img.length > 0 && (
-          <img
-            src={menuItem.img[0].url}
-            alt={menuItem.title}
-            className='menu-img big-img'
-          />
-        )}
+      <div className='link-menu'>
+        <ul>
+          <li>
+            <Link to={`/menu`}>menu</Link>
+          </li>
+          <FaAngleRight />
+          <li>
+            {' '}
+            <Link to={`/menu`}>{menuItem.categories}</Link>
+          </li>
+        </ul>
+      </div>
+      <div className='menu-details'>
+        <div className='single-menu-img'>
+          {menuItem.img && menuItem.img.length > 0 && (
+            <img
+              src={menuItem.img[0].url}
+              alt={menuItem.title}
+              className='menu-img big-img'
+            />
+          )}
+        </div>
 
         <div className='desc-menu'>
-          <p>{menuItem.descone}</p>
-          <span className='title-dash'></span>
+          <h3>{menuItem.title}</h3>
           <h3>{menuItem.priceone}CFA</h3>
+          <p>{menuItem.descone}</p>
         </div>
-        <div className='desc-menu'>
-          <p>{menuItem.desctwo}</p>
-          <span className='title-dash'></span>
-          <h3>{menuItem.pricetwo}CFA</h3>
-        </div>
-        {menuItem.descthree ? (
-          <div className='desc-menu'>
-            <p>{menuItem.descthree}</p>
-            {menuItem.priceone && menuItem.descthree ? (
-              <span className='title-dash'></span>
-            ) : null}
-            {menuItem.pricethree ? <h3>{menuItem.pricethree}CFA</h3> : null}
-          </div>
-        ) : null}
       </div>
-      <div className='title'>
-        <Order />
+      <div>
+        <button onClick={handleAddToCart} className='single-menu-cart btn'>
+          Add to Cart
+        </button>
       </div>
     </>
   )

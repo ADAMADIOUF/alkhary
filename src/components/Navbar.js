@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
-import logo from "../assets/logo.png"
-import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { FaBars, FaTimes } from 'react-icons/fa'
+import logo from "../assets/logok.png"
+import { Link, Link as RouterLink, useLocation } from 'react-router-dom'
+import { FaBars, FaShoppingCart, FaTimes } from 'react-icons/fa'
 import { animateScroll as scroll } from 'react-scroll'
+import { useCart } from '../CartContext'
 
 const Navbar = () => {
+  const { cart } = useCart() 
+
   const [isMenuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
 
@@ -52,7 +55,7 @@ const Navbar = () => {
                 handleItemClick()
               }}
             >
-              Menu
+              food Menu
             </RouterLink>
           </li>
           <li className='nav-item'>
@@ -96,6 +99,17 @@ const Navbar = () => {
             </li>
           )}
         </ul>
+        
+        <div className='cart-icon'>
+          <FaShoppingCart />
+          <Link to='/cart'>
+            {cart.length === 0 ? (
+              <span className='cart-count'>Cart is empty</span>
+            ) : (
+              <span className='cart-count'>{cart.length}</span>
+            )}
+          </Link>
+        </div>
       </div>
     </nav>
   )

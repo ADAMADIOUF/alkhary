@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-const Order = () => {
+const Order = ({ totalPrice,titles }) => {
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     date: '',
-    produit:"",
-    numéroDeTéléphone: '', // Changed the field name to French
+    produit: '',
+    numéroDeTéléphone: '',
+    
   })
 
   const [successMessage, setSuccessMessage] = useState('')
@@ -19,16 +21,22 @@ const Order = () => {
       [name]: value,
     })
   }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
+      const orderData = {
+        name: formData.name,
+        email: formData.email,
+        produit: formData.produit,
+        phoneNumber: formData.phoneNumber,
+        titles, // Add title to the orderData object
+        totalPrice, // Add totalPrice to the orderData object
+      }
+
       // Submit reservation data to your serverless function
-      const response = await axios.post(
-        '/.netlify/functions/order',
-        formData
-      )
+      const response = await axios.post('/.netlify/functions/order', orderData)
+
       console.log('Réservation envoyée:', response.data)
 
       // Show success message
@@ -38,9 +46,11 @@ const Order = () => {
       setFormData({
         name: '',
         email: '',
-        produit:"",
-        phoneNumber: '', // Changed the field name to French
+        produit: '',
+        phoneNumber: '',
       })
+
+     
 
       // Hide success message after 3 seconds
       setTimeout(() => {
@@ -54,11 +64,7 @@ const Order = () => {
 
   return (
     <div className='reservations section-center' id='reservations'>
-      <div className='title'>
-        <div className='underline'></div>
-        <h3> COMMANDEZ MAINTENANT.</h3>
-        <div className='underline'></div>
-      </div>
+      
       {successMessage && (
         <div className='success-message'>{successMessage}</div>
       )}
@@ -107,10 +113,33 @@ const Order = () => {
             required
           />
         </div>
+        <div className='reservation-input'>
+          <label htmlFor='title'>Titre du produit :</label>
+          <input
+            type='text'
+            id='title'
+            name='title'
+            value={titles}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='reservation-input'>
+          <label htmlFor='totalPrice'>Prix total :</label>
+          <input
+            type='text'
+            id='totalPrice'
+            name='totalPrice'
+            value={totalPrice}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
         <button type='submit' className='reservation-btn'>
           Envoyer
         </button>
+        
       </form>
     </div>
   )

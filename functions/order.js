@@ -23,15 +23,18 @@ exports.handler = async (event, context, cb) => {
   try {
     // Parse the form data from the event object (modify this part based on your form submission)
     const formData = JSON.parse(event.body)
-    const { produit, name, email, phoneNumber } = formData
+    const { produit, name, email, phoneNumber, titles, totalPrice } = formData
 
     // Check if 'email' is a valid recipient email address
     if (email && isValidEmail(email)) {
+      // Check if 'titles' is defined before calling 'join'
+      const titlesText = titles ? titles.join(', ') : '' // Join titles if defined, otherwise set to an empty string
+
       const mailOptions = {
         from: 'your-email@gmail.com',
         to: email,
         subject: 'Your Subject Here',
-        text: `Hello I'am ${name} ${produit} ,\n\nYour reservation details:\nMessage: ${phoneNumber}\n`,
+        text: `Hello I'm ${name},\n\nYour reservation details:\nProduct: ${produit}\nMessage: ${phoneNumber}\nTitles: ${titlesText}\nTotal Price: ${totalPrice} CFA\n`,
       }
 
       // Send the email

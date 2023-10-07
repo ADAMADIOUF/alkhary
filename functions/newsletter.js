@@ -23,15 +23,15 @@ exports.handler = async (event, context, cb) => {
   try {
     // Parse the form data from the event object (modify this part based on your form submission)
     const formData = JSON.parse(event.body)
-    const { name, email, date, time, guests, phoneNumber } = formData
+    const { name, email } = formData
 
     // Check if 'email' is a valid recipient email address
     if (email && isValidEmail(email)) {
       const mailOptions = {
         from: 'your-email@gmail.com',
-        to: 'aboubakrysy25@gmail.com ',
+        to: email,
         subject: 'Your Subject Here',
-        text: `Hello I'am ${name},\n\nYour reservation details:\nDate: ${date}\nTime: ${time}\nMessage: \nGuests: ${guests}\nPhoneNumber: ${phoneNumber}\n`,
+        text: `Hello I'am ${name},\n\n`,
       }
 
       // Send the email
